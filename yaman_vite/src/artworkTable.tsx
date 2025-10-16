@@ -1,4 +1,3 @@
-// src/components/ArtworkTable.tsx
 import { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -20,7 +19,6 @@ export const ArtworkTable = () => {
 
     const overlayRef = useRef<OverlayPanel>(null);
 
-    // helper to fetch a page
     const fetchArtworksPage = async (pageNumber: number, limit: number) => {
         const res = await fetch(
             `https://api.artic.edu/api/v1/artworks?page=${pageNumber}&limit=${limit}`
@@ -29,7 +27,6 @@ export const ArtworkTable = () => {
         return data;
     };
 
-    // load current page
     const loadPage = async (pageNumber: number) => {
         setLoading(true);
         try {
@@ -48,14 +45,12 @@ export const ArtworkTable = () => {
         loadPage(page);
     }, [page]);
 
-    // merge selection for current page
     const onSelectionChange = (e: Artwork[]) => {
         const currentPageIds = new Set(artworks.map((a) => a.id));
         const others = selectedArtworks.filter((a) => !currentPageIds.has(a.id));
         setSelectedArtworks([...others, ...e]);
     };
 
-    // select first N globally
     const selectFirstNGlobal = async (n: number) => {
         if (!n || n <= 0) return;
         let merged = [...selectedArtworks];
@@ -74,7 +69,7 @@ export const ArtworkTable = () => {
     };
 
     return (
-        <div style={{ padding: 16 }}>
+        <div style={{ borderRadius: 20 }}>
             <OverlayPanel ref={overlayRef} dismissable>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 150 }}>
                     <InputNumber value={rowsToSelect} onValueChange={(e) => setRowsToSelect(e.value ?? 0)} min={1} max={totalRecords} />
