@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -69,7 +70,7 @@ export const ArtworkTable = () => {
     };
 
     return (
-        <div style={{ borderRadius: 20 }}>
+        <div style={{ padding: 16, borderRadius: 20 }}>
             <OverlayPanel ref={overlayRef} dismissable>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 150 }}>
                     <InputNumber value={rowsToSelect} onValueChange={(e) => setRowsToSelect(e.value ?? 0)} min={1} max={totalRecords} />

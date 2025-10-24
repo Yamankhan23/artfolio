@@ -19,9 +19,9 @@ const App: React.FC = () => {
       <h1
         style={{
           fontFamily: `'Playfair Display', serif`,
-          fontSize: '2.2rem',
+          fontSize: '3.2rem',
           color: '#0A84FF',
-          marginBottom: '1.5rem',
+          marginBottom: '1.8rem',
           textAlign: 'center',
           fontWeight: '600',
         }}

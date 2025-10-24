@@ -1,0 +1,46 @@
+name: Netlify Deploy + Telegram Notify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to Netlify
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=build --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Notify Telegram
+  if: success()
+  run: |
+    COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1)
+    AUTHOR=${{ github.actor }}
+    BRANCH=${{ github.ref_name }}
+    REPO=${{ github.repository }}
+    MESSAGE="✅ *Deployment Successful!*\n\n📦 Repository: *$REPO*\n🌿 Branch: *$BRANCH*\n👤 Author: *$AUTHOR*\n📝 Commit: _$COMMIT_MSG_"
+    curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
+      -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+      -d parse_mode=Markdown \
+      -d text="$MESSAGE"
+

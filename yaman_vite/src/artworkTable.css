@@ -1,6 +1,5 @@
 .artwork-table-container {
     background: rgba(255, 255, 255, 0.35);
-    /* translucent white */
     backdrop-filter: blur(18px) saturate(180%);
     -webkit-backdrop-filter: blur(18px) saturate(180%);
     border-radius: 16px;

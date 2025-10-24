@@ -20,3 +20,4 @@ export interface ArtworkResponse {
     data: Artwork[];
     pagination: Pagination;
 }
+
