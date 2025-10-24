@@ -32,15 +32,15 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Notify Telegram
-  if: success()
-  run: |
-    COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1)
-    AUTHOR=${{ github.actor }}
-    BRANCH=${{ github.ref_name }}
-    REPO=${{ github.repository }}
-    MESSAGE="✅ *Deployment Successful!*\n\n📦 Repository: *$REPO*\n🌿 Branch: *$BRANCH*\n👤 Author: *$AUTHOR*\n📝 Commit: _$COMMIT_MSG_"
-    curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-      -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-      -d parse_mode=Markdown \
-      -d text="$MESSAGE"
-
+        if: success()
+        run: |
+          NETLIFY_URL="https://artfolioyaman.netlify.app/"
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1)
+          AUTHOR=${{ github.actor }}
+          BRANCH=${{ github.ref_name }}
+          REPO=${{ github.repository }}
+          MESSAGE="✅ *Deployment Successful!*\n\n📦 Repository: *$REPO*\n🌿 Branch: *$BRANCH*\n👤 Author: *$AUTHOR*\n📝 Commit: _$COMMIT_MSG_\n🔗 [View Site]($NETLIFY_URL)"
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d parse_mode=Markdown \
+            -d text="$MESSAGE"
