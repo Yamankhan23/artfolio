@@ -1,5 +1,6 @@
 name: Telegram Notify on Deploy
 
+# Trigger on pushes to main branch
 on:
   push:
     branches:
@@ -13,12 +14,13 @@ jobs:
       - name: Send Telegram Notification
         run: |
           NETLIFY_URL="https://artfolioyaman.netlify.app/"
-          # Make commit message single-line and escape special MarkdownV2 characters
+          # Make commit message single-line and escape all MarkdownV2 special characters
           COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | tr '\n' ' ' | sed 's/[_*[\]()~`>#+\-=|{}.!]/\\&/g')
           AUTHOR=${{ github.actor }}
           BRANCH=${{ github.ref_name }}
           REPO=${{ github.repository }}
-          MESSAGE="✅ *Deployment Successful*\n\n📦 Repository: *$REPO*\n🌿 Branch: *$BRANCH*\n👤 Author: *$AUTHOR*\n📝 Commit: _$COMMIT_MSG_\n🔗 [View Site]($NETLIFY_URL)"
+          # Do NOT wrap commit message in _italics_ to avoid parsing errors
+          MESSAGE="✅ *Deployment Successful*\n\n📦 Repository: *$REPO*\n🌿 Branch: *$BRANCH*\n👤 Author: *$AUTHOR*\n📝 Commit: $COMMIT_MSG\n🔗 [View Site]($NETLIFY_URL)"
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
             -d parse_mode=MarkdownV2 \
