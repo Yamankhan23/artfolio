@@ -1,4 +1,4 @@
-name: Netlify Deploy + Telegram Notify
+name: Telegram Notify on Deploy
 
 on:
   push:
@@ -6,33 +6,10 @@ on:
       - main
 
 jobs:
-  deploy:
+  notify:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install and Build
-        run: |
-          npm ci
-          npm run build
-
-      - name: Deploy to Netlify
-        uses: netlify/actions/cli@master
-        with:
-          args: deploy --dir=dist --prod
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
       - name: Notify Telegram
-        if: success()
         run: |
           NETLIFY_URL="https://artfolioyaman.netlify.app/"
           COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1)
