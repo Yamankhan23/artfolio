@@ -1,15 +1,17 @@
 name: Telegram Notify on Deploy
 
+# Trigger on pushes to main branch
 on:
   push:
     branches:
       - main
 
 jobs:
-  notify:
+  telegram_notify:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Notify Telegram
+      - name: Send Telegram Notification
         run: |
           NETLIFY_URL="https://artfolioyaman.netlify.app/"
           COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1)
