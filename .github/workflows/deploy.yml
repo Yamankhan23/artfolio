@@ -1,6 +1,5 @@
 name: Telegram Notify on Deploy
 
-# Trigger on pushes to main branch
 on:
   push:
     branches:
@@ -14,8 +13,7 @@ jobs:
       - name: Send Telegram Notification
         run: |
           NETLIFY_URL="https://artfolioyaman.netlify.app/"
-          # Get the commit message and escape special Markdown characters
-          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1 | sed 's/[_*[\]()]/\\&/g')
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | tr '\n' ' ' | sed 's/[_*[\]()]/\\&/g')
           AUTHOR=${{ github.actor }}
           BRANCH=${{ github.ref_name }}
           REPO=${{ github.repository }}
