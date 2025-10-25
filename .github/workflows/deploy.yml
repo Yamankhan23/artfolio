@@ -1,0 +1,26 @@
+name: Telegram Notify on Deploy
+
+# Trigger on pushes to main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  telegram_notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Telegram Notification
+        run: |
+          NETLIFY_URL="https://artfolioyaman.netlify.app/"
+          # Get the commit message and escape special Markdown characters
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1 | sed 's/[_*[\]()]/\\&/g')
+          AUTHOR=${{ github.actor }}
+          BRANCH=${{ github.ref_name }}
+          REPO=${{ github.repository }}
+          MESSAGE="✅ *Deployment Successful!*\n\n📦 Repository: *$REPO*\n🌿 Branch: *$BRANCH*\n👤 Author: *$AUTHOR*\n📝 Commit: _$COMMIT_MSG_\n🔗 [View Site]($NETLIFY_URL)"
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d parse_mode=Markdown \
+            -d text="$MESSAGE"
